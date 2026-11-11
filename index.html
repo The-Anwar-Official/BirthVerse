@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BirthVerse — a little birthday universe</title>
+  <meta name="description" content="Create a personal birthday celebration with games, wishes, music, and memories stored in your browser.">
+  <meta name="theme-color" content="#0f071a">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Canvas Confetti CDN (with fallback handling in JS) -->
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Floating Background Ambient Elements -->
+  <div class="ambient-bg">
+    <div class="gradient-blob blob-1"></div>
+    <div class="gradient-blob blob-2"></div>
+    <div class="gradient-blob blob-3"></div>
+    <div class="sparkles-container" id="sparklesBg"></div>
+  </div>
+
+  <!-- Top Navigation (Desktop & General Controls) -->
+  <header class="top-nav">
+    <div class="nav-brand">
+      <span class="logo-icon">🎈</span>
+      <span class="logo-text">Birth<span class="logo-highlight">Verse</span></span>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Music Player Mini Controller -->
+      <button id="musicToggleBtn" class="nav-btn music-btn" aria-label="Toggle Audio Player">
+        <span class="music-icon">🎵</span>
+        <span class="music-label">Vibe Music</span>
+        <div class="sound-wave paused" id="miniVisualizer">
+          <span></span><span></span><span></span>
+        </div>
+      </button>
+
+      <!-- Theme Selector Dropdown -->
+      <div class="theme-dropdown-wrapper">
+        <button id="themeMenuBtn" class="nav-btn theme-btn" aria-label="Select Theme">
+          <span class="theme-icon">🎨</span>
+          <span class="theme-name">Midnight Black</span>
+        </button>
+        <div class="theme-menu hidden" id="themeMenu"><button class="theme-option active" data-theme="midnight">Midnight Black</button><button class="theme-option" data-theme="emerald">Emerald Green</button><button class="theme-option" data-theme="ocean">Ocean Blue</button><button class="theme-option" data-theme="cyan">Cyan Neon</button><button class="theme-option" data-theme="sunset">Sunset Glow</button><button class="theme-option" data-theme="cosmic">Cosmic Purple</button></div>
+      </div>
+
+      <!-- Quick Setup Button -->
+      <button id="quickSetupBtn" class="nav-btn primary-btn" aria-label="Configure Birthday Person">
+        <span>⚙️ Setup</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Desktop Sidebar Navigation / Desktop Anchor Bar -->
+  <nav class="desktop-nav">
+    <a href="#hero" class="nav-link active" data-section="hero"><span>🏠</span> Home</a>
+    <a href="#countdown" class="nav-link" data-section="countdown"><span>â³</span> Timer</a>
+    <a href="#cake" class="nav-link" data-section="cake"><span>🎂</span> Cake</a>
+    <a href="#wishes" class="nav-link" data-section="wishes"><span>💬</span> Wishes</a>
+    <a href="#games" class="nav-link" data-section="games"><span>🎮</span> Mini Games</a>
+    <!-- <a href="#musicZone" class="nav-link" data-section="musicZone"><span aria-hidden="true">&#x1F3B5;</span> Music</a> -->
+    <a href="#blueCake" class="nav-link" data-section="blueCake"><span aria-hidden="true">&#x1F370;</span> Blue the Cake</a>
+    <a href="#moodLab" class="nav-link" data-section="moodLab"><span aria-hidden="true">&#x2728;</span> Atmosphere</a>
+    <a href="#gallery" class="nav-link" data-section="gallery"><span>📸</span> Memories</a>
+    <a href="#musicZone" class="nav-link" data-section="musicZone"><span aria-hidden="true">&#x1F3B5;</span> Music</a>
+    <a href="#gift" class="nav-link" data-section="gift"><span>🎁</span> Surprise</a>
+    <a href="#finale" class="nav-link" data-section="finale"><span>🎉</span> Finale</a>
+      <!-- <a href="#gallery" class="nav-link" data-section="gallery"><span aria-hidden="true">&#x1F4F8;</span> Memories</a> -->
+    
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- 1. LANDING HERO SECTION -->
+    <section id="hero" class="section hero-section">
+      <div class="hero-content">
+        <div class="bday-badge">
+          <span class="badge-dot"></span>
+          <span id="heroBadgeText">Celebrating Someone Special!</span>
+        </div>
+
+        <h1 class="hero-title">
+          Birth<span class="text-gradient">verse</span> <span class="emoji-bounce">🎉</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Create an unforgettable birthday celebration for <strong id="birthdayPersonNameDisplay" class="highlight-name">a friend</strong>.
+        </p>
+
+        <div class="hero-cta-group">
+          <button id="startPartyBtn" class="btn btn-primary btn-xl glow-effect">
+            🚀 Start the Party
+          </button>
+          <button id="openSetupModalBtn" class="btn btn-secondary btn-xl">
+            ✏️ Customize Birthday
+          </button>
+        </div>
+
+        <!-- Quick Stats / Highlights -->
+        <div class="hero-features-strip">
+          <div class="feature-chip">🎂 Blow Real Candles</div>
+          <div class="feature-chip">🎮 3 Mini Games</div>
+          <div class="feature-chip">💬 Live Wishes Wall</div>
+          <div class="feature-chip">🎁 Surprise Dares</div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Floating Elements -->
+      <div class="hero-visual">
+        <div class="floating-balloon balloon-1">🎈</div>
+        <div class="floating-balloon balloon-2">🎈</div>
+        <div class="floating-balloon balloon-3">🎈</div>
+        <div class="hero-card-preview glass-card">
+          <div class="preview-header">
+            <span class="preview-avatar">👑</span>
+            <div class="preview-text">
+              <h3 id="cardPreviewName">Happy Birthday, Legend!</h3>
+              <p id="cardPreviewDate">Today is the Day!</p>
+            </div>
+          </div>
+          <p class="preview-msg" id="cardPreviewMsg">"May your code compile without errors and your day be filled with endless cake!"</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. COUNTDOWN SECTION -->
+    <section id="countdown" class="section countdown-section">
+      <div class="section-header text-center">
+        <span class="section-tag">â³ The Big Clock</span>
+        <h2 class="section-title">Countdown to <span id="countdownName" class="text-gradient">Celebration</span></h2>
+        <p class="section-sub">Get ready for the blast!</p>
+      </div>
+
+      <div class="countdown-wrapper" id="countdownWrapper">
+        <div class="countdown-card glass-card">
+          <span class="count-num" id="days">00</span>
+          <span class="count-label">Days</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-card glass-card">
+          <span class="count-num" id="hours">00</span>
+          <span class="count-label">Hours</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-card glass-card">
+          <span class="count-num" id="minutes">00</span>
+          <span class="count-label">Minutes</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-card glass-card">
+          <span class="count-num" id="seconds">00</span>
+          <span class="count-label">Seconds</span>
+        </div>
+      </div>
+
+      <p class="countdown-status" id="countdownStatus">Choose a birthday date in Setup to start the countdown.</p>
+      <!-- It's Birthday Time Banner (Shown when date hits) -->
+      <div id="bdayTimeBanner" class="bday-banner glass-card hidden">
+        <div class="banner-badge">IT'S PARTY TIME! 🥳</div>
+        <h2>IT'S <span id="bannerPersonName">FELLOW HUMAN</span>'S BIRTHDAY TODAY!</h2>
+        <p>Let's blow candles, play games, and shower love!</p>
+        <button id="jumpToCakeBtn" class="btn btn-primary glow-effect">🎂 Go to Cake Cutting!</button>
+      </div>
+    </section>
+
+    <!-- 3. INTERACTIVE CAKE SECTION -->
+    <section id="cake" class="section cake-section">
+      <div class="section-header text-center">
+        <span class="section-tag">🎂 Blow & Cut</span>
+        <h2 class="section-title">Interactive <span class="text-gradient">Birthday Cake</span></h2>
+        <p class="section-sub">Blow into your microphone or tap to extinguish the candles.</p>
+      </div>
+
+      <div class="cake-stage">
+        <!-- Interactive 3D/CSS Birthday Cake -->
+        <div class="cake-container" id="cakeContainer">
+          <!-- Candles Layer -->
+          <div class="candles-wrapper" id="candlesWrapper">
+            <div class="candle candle-1">
+              <div class="flame" id="flame1"></div>
+              <div class="smoke" id="smoke1"></div>
+            </div>
+            <div class="candle candle-2">
+              <div class="flame" id="flame2"></div>
+              <div class="smoke" id="smoke2"></div>
+            </div>
+            <div class="candle candle-3">
+              <div class="flame" id="flame3"></div>
+              <div class="smoke" id="smoke3"></div>
+            </div>
+          </div>
+
+          <!-- Cake Tiers -->
+          <div class="cake-tier tier-top">
+            <div class="icing"></div>
+            <div class="sprinkles"><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="cake-tier tier-bottom">
+            <div class="icing"></div>
+            <div class="sprinkles"><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="cake-plate"></div>
+        </div>
+
+        <!-- Controls for Cake -->
+        <div class="cake-controls">
+          <div class="blow-status" id="blowStatusText">
+            🕯️ Candles are lit! Blow into microphone or tap below.
+          </div>
+
+          <div class="cake-btn-group">
+            <button id="enableMicBtn" class="btn btn-secondary">
+              🎙️ Enable Mic Blow
+            </button>
+            <button id="tapBlowBtn" class="btn btn-primary glow-effect">
+              💨 Tap to Blow Candles
+            </button>
+            <button id="cutCakeBtn" class="btn btn-accent hidden glow-effect">
+              🔪 Cut Cake & Eat Slice!
+            </button>
+          </div>
+        </div>
+
+        <!-- Wish Result Card (Hidden until candles blown) -->
+        <div id="wishMessageCard" class="wish-reveal-card glass-card hidden">
+          <div class="wish-stars">✨ ✨ ✨</div>
+          <h3>Make a Wish! 🌟</h3>
+          <p id="cakeWishText">"May all your wildest dreams come true this year!"</p>
+          <button id="relightCandlesBtn" class="btn btn-small btn-secondary">🕯️ Relight Candles</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. WISHES WALL SECTION -->
+    <section id="wishes" class="section wishes-section">
+      <div class="section-header">
+        <div class="header-left">
+          <span class="section-tag">💬 Wall of Love</span>
+          <h2 class="section-title">Birthday <span class="text-gradient">Wishes Wall</span></h2>
+        </div>
+        <button id="addWishModalBtn" class="btn btn-primary">
+          ✍️ Post a Wish
+        </button>
+      </div>
+
+      <!-- Wishes Grid -->
+      <!-- <p class="section-sub">Your wishes are saved only in this browser. They are not shared with other visitors or devices.</p> -->
+      <p class="local-data-note">Wishes are saved only in this browser; this wall is not shared across visitors or devices.</p>
+      <div class="wishes-grid" id="wishesGrid">
+        <!-- Wish cards populated dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- 5. MINI GAMES SECTION -->
+    <section id="games" class="section games-section">
+      <div class="section-header text-center">
+        <span class="section-tag">🎮 Arcade Zone</span>
+        <h2 class="section-title">Party <span class="text-gradient">Mini Games</span></h2>
+        <p class="section-sub">Chase a new high score, or add a custom quiz question for your crew.</p>
+      </div>
+
+      <!-- Game Select Tabs -->
+      <p class="arcade-kicker">LITTLE BIRD ARCADE · quick games for every visitor</p>
+      <div class="game-tabs" role="tablist" aria-label="Birthday games">
+        <button class="game-tab-btn active" data-game="balloon">🎈 Balloon Pop</button>
+        <button class="game-tab-btn" data-game="catcher">🧁 Cake Catcher</button>
+        <button class="game-tab-btn" data-game="trivia">🧠 Birthday Trivia</button>
+      </div>
+
+      <!-- Game Container Area -->
+      <div class="game-display-area glass-card">
+
+        <!-- Game 1: Balloon Pop -->
+        <div id="gameBalloon" class="game-view">
+          <div class="game-stats">
+            <div class="stat-box">Score: <span id="balloonScore">0</span></div>
+            <div class="stat-box">Time: <span id="balloonTime">30</span>s</div>
+            <div class="stat-box">Best: <span id="balloonBest">0</span></div>
+          </div>
+          <div class="game-canvas-wrapper" id="balloonArena">
+            <div class="game-overlay" id="balloonOverlay">
+              <h3>🎈 Balloon Pop Blitz</h3>
+              <p>Tap/Click floating balloons before time runs out! Golden = +50 pts, Bombs = -20 pts!</p>
+              <button id="startBalloonGameBtn" class="btn btn-primary btn-lg">Start Game</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game 2: Cake Catcher -->
+        <div id="gameCatcher" class="game-view hidden">
+          <div class="game-stats">
+            <div class="stat-box">Score: <span id="catcherScore">0</span></div>
+            <div class="stat-box">Time: <span id="catcherTime">30</span>s</div>
+            <div class="stat-box">Best: <span id="catcherBest">0</span></div>
+          </div>
+          <div class="game-canvas-wrapper" id="catcherArena">
+            <div class="catcher-basket" id="catcherBasket">🧺</div>
+            <div class="game-overlay" id="catcherOverlay">
+              <h3>🧁 Cake Catcher</h3>
+              <p>Catch falling treats! Desktop: Arrow Keys / A-D. Mobile: Drag basket across screen.</p>
+              <button id="startCatcherGameBtn" class="btn btn-primary btn-lg">Start Game</button>
+            </div>
+          </div>
+          <div class="mobile-touch-controls">
+            <button id="catcherLeftBtn" class="touch-btn">â—€ Left</button>
+            <button id="catcherRightBtn" class="touch-btn">Right â–¶</button>
+          </div>
+        </div>
+
+        <!-- Game 3: Birthday Trivia -->
+        <div id="gameTrivia" class="game-view hidden">
+          <div class="trivia-card" id="triviaCard"><div class="trivia-start-panel" id="triviaStartPanel"><p>Five cheerful sample questions. Add your own below, then start a fresh round.</p><button id="startTriviaBtn" class="btn btn-primary btn-lg" type="button">Start Quiz</button></div>
+            <div class="trivia-header">
+              <span id="triviaProgress">Question 1/5</span>
+              <span class="trivia-score">Score: <span id="triviaScore">0</span></span>
+            </div>
+            <h3 id="triviaQuestion">How well do you know the birthday legend?</h3>
+            <div class="trivia-options" id="triviaOptions">
+              <!-- Options rendered dynamically -->
+            </div>
+            <div class="trivia-controls"><button id="nextTriviaBtn" class="btn btn-primary hidden" type="button">Next Question</button>
+              <button id="addTriviaQuestionBtn" class="btn btn-small btn-secondary">+ Add Custom Question</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. MEMORIES / GALLERY SECTION -->
+    <section id="blueCake" class="section blue-cake-section">
+      <div class="section-header text-center"><span class="section-tag">BLUE THE CAKE</span><h2 class="section-title">Frost a <span class="text-gradient">birthday masterpiece</span></h2><p class="section-sub">Tap the cake to paint it cyan. Fill the frosting meter before the timer ends.</p></div>
+      <div class="bluecake-stage"><div class="bluecake-art" id="bluecakeArt" role="button" tabindex="0" aria-label="Tap to frost the cake"><div class="bluecake-candle">✦</div><div class="bluecake-top"></div><div class="bluecake-middle"></div><div class="bluecake-bottom"></div><div class="bluecake-plate"></div></div><div class="bluecake-score"><p>Frosting <strong id="bluecakeScore">0%</strong></p><div class="bluecake-meter"><span id="bluecakeMeter"></span></div><p id="bluecakeStatus" aria-live="polite">Tap the cake to begin frosting!</p><button id="bluecakeStart" class="btn btn-primary" type="button">Start frosting</button></div></div>
+    </section>
+    <section id="moodLab" class="section mood-lab-section">
+      <div class="section-header text-center"><span class="section-tag">MAKE THE WHOLE PAGE YOURS</span><h2 class="section-title">Choose your <span class="text-gradient">party atmosphere</span></h2><p class="section-sub">Try Cosmic Candy's starry sparkle or Sunset Glow's warm horizon. Each palette recolors the whole experience and saves only in this browser.</p></div>
+      <div class="theme-showcase" id="themeShowcase"></div><div class="mood-actions"><button id="saveThemeBtn" class="btn btn-primary" type="button">Save this vibe</button><button id="surpriseThemeBtn" class="btn btn-secondary" type="button">Surprise me</button></div><canvas id="moodCanvas" width="900" height="240" aria-label="Interactive theme particles"></canvas><p class="mood-hint" id="moodHint">Tap or click the atmosphere to send a little burst of light.</p>
+    </section>
+    <section id="gallery" class="section gallery-section">
+      <div class="section-header">
+        <div class="header-left">
+          <span class="section-tag">📸 Scrapbook</span>
+          <h2 class="section-title">Memory <span class="text-gradient">Gallery</span></h2>
+        </div>
+        <label for="photoUploadInput" class="btn btn-primary upload-label">
+          📤 Upload Photo
+          <input type="file" id="photoUploadInput" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden-input">
+        </label>
+      </div>
+
+      <!-- Photo Grid -->
+      <p class="local-data-note">Memories stay on this device in this browser. They are not included in shared links.</p>
+      <div class="polaroid-grid" id="polaroidGrid">
+        <!-- Photos populated dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- 7. MUSIC & VIBE ZONE -->
+    <section id="musicZone" class="section music-section">
+      <div class="section-header text-center">
+        <span class="section-tag">🎧 Sound & Lights</span>
+        <h2 class="section-title">Vibe <span class="text-gradient">Jukebox</span></h2>
+        <p class="section-sub">Choose a real sung Happy Birthday song, then press Play to sing along!</p>
+      </div>
+
+      <div class="jukebox-card glass-card">
+        <div class="jukebox-disc" id="jukeboxDisc">
+          <div class="disc-inner">🎵</div>
+        </div>
+
+        <div class="jukebox-controls"><p class="music-live" id="musicLiveStatus" aria-live="polite">Choose a melody and press Play.</p>
+          <h3 id="musicTrackTitle">Happy Birthday to You</h3>
+          <p id="musicStatusText">Tap Play to hear Happy Birthday to You!</p>
+
+          <label class="track-select-label" for="melodySelect">Choose a real Happy Birthday song</label><select id="melodySelect" class="melody-select"><option value="classic" selected>🎂 Happy Birthday to You — Sing Along (Default)</option><option value="birthday-channel">🎉 Happy Birthday To You — Birthday Songs</option><option value="party">🥳 Happy Birthday Party Song — DJ Raphi</option></select><div class="real-song-player"><iframe id="birthdaySongPlayer" title="Happy Birthday song player" width="560" height="315" src="https://www.youtube-nocookie.com/embed/IfNlg9jdVuY?enablejsapi=1&amp;controls=1&amp;rel=0&amp;playsinline=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+
+          <div class="audio-control-row">
+            <button id="playAudioBtn" class="btn btn-primary btn-lg glow-effect" type="button">
+              â–¶ Play Beat
+            </button>
+            <button id="pauseAudioBtn" class="btn btn-secondary" type="button">Pause</button>
+            <button id="stopAudioBtn" class="btn btn-secondary" type="button">Stop</button>
+            <div class="volume-slider-wrap">
+              <span>🔊</span>
+              <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.35" aria-label="Music volume">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. SURPRISE GIFT BOX SECTION -->
+    <section id="gift" class="section gift-section">
+      <div class="section-header text-center">
+        <span class="section-tag">🎁 Unwrap Wonder</span>
+        <h2 class="section-title">Surprise <span class="text-gradient">Gift Box</span></h2>
+        <p class="section-sub">Tap the gift to reveal a little birthday surprise.</p>
+      </div>
+
+      <div class="gift-stage">
+        <div class="gift-box-wrapper" id="giftBox">
+          <div class="gift-lid">
+            <div class="gift-bow">🎀</div>
+          </div>
+          <div class="gift-body">🎁</div>
+        </div>
+
+        <p class="gift-instruction" id="giftInstructionText">✨ Tap or Click the Gift Box to Unwrap! ✨</p>
+
+        <!-- Revealed Surprise Modal/Card -->
+        <div id="giftRevealCard" class="gift-reveal glass-card hidden">
+          <div class="surprise-type-badge" id="surpriseBadge">🔥 BIRTHDAY SUPERPOWER</div>
+          <h3 id="surpriseTitle">You Got: The Immunity Pass!</h3>
+          <p id="surpriseBody" class="surprise-text">"You are officially exempt from paying for anything today. Friends must fund your cake!"</p>
+          <div class="surprise-actions">
+            <button id="anotherSurpriseBtn" class="btn btn-secondary">🎁 Open Another</button>
+            <button id="shareSurpriseBtn" class="btn btn-primary">📲 Share Surprise</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. FINALE CELEBRATION SECTION -->
+    <section id="finale" class="section finale-section text-center">
+      <div class="finale-content glass-card">
+        <div class="finale-badge">🎉 GRAND FINALE 🎉</div>
+
+        <h2 class="finale-heading">
+          HAPPY BIRTHDAY <span id="finaleName" class="text-gradient">LEGEND</span>!
+        </h2>
+
+        <!-- Typewriter Letter -->
+        <div class="typewriter-box">
+          <p id="typewriterText"></p>
+        </div>
+
+        <div class="finale-actions">
+          <button id="triggerFireworksBtn" class="btn btn-primary btn-xl glow-effect">
+            🎆 Launch Grand Fireworks
+          </button>
+          <button id="shareWebsiteBtn" class="btn btn-accent btn-xl">
+            🔗 Share BirthVerse Link
+          </button>
+          <button id="resetSetupBtn" class="btn btn-secondary btn-xl">
+            ✨ Create New BirthVerse
+          </button>
+        </div>
+      </div>
+    <p class="share-privacy">A shared link contains only the birthday name, date, message, and theme. Anyone with the link can see those details. Photos, wishes, memories, scores, and custom quiz questions stay in this browser.</p>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="#hero" class="b-nav-item active" data-section="hero">
+      <span class="b-nav-icon">🏠</span>
+      <span class="b-nav-label">Home</span>
+    </a>
+    <a href="#countdown" class="b-nav-item" data-section="countdown">
+      <span class="b-nav-icon">â³</span>
+      <span class="b-nav-label">Timer</span>
+    </a>
+    <a href="#cake" class="b-nav-item" data-section="cake">
+      <span class="b-nav-icon">🎂</span>
+      <span class="b-nav-label">Cake</span>
+    </a>
+    <a href="#wishes" class="b-nav-item" data-section="wishes">
+      <span class="b-nav-icon">💬</span>
+      <span class="b-nav-label">Wishes</span>
+    </a>
+    <a href="#games" class="b-nav-item" data-section="games">
+      <span class="b-nav-icon">🎮</span>
+      <span class="b-nav-label">Games</span>
+    </a>
+    <a href="#gallery" class="b-nav-item" data-section="gallery"><span class="b-nav-icon">&#x1F4F8;</span><span class="b-nav-label">Memory</span></a>
+    <a href="#musicZone" class="b-nav-item" data-section="musicZone"><span class="b-nav-icon">&#x1F3B5;</span><span class="b-nav-label">Music</span></a>
+    <a href="#blueCake" class="b-nav-item" data-section="blueCake"><span class="b-nav-icon">&#x1F370;</span><span class="b-nav-label">Frost</span></a>
+    <a href="#moodLab" class="b-nav-item" data-section="moodLab"><span class="b-nav-icon">&#x2728;</span><span class="b-nav-label">Vibe</span></a>
+    <a href="#gift" class="b-nav-item" data-section="gift">
+      <span class="b-nav-icon">🎁</span>
+      <span class="b-nav-label">Gift</span>
+    </a>
+    <a href="#finale" class="b-nav-item" data-section="finale">
+      <span class="b-nav-icon">🎉</span>
+      <span class="b-nav-label">Finale</span>
+    </a>
+  </nav>
+
+  <!-- MODAL: BIRTHDAY SETUP -->
+  <div class="modal-backdrop hidden" id="setupModal">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3>⚙️ Birthdayverse Setup</h3>
+        <button class="close-modal-btn" id="closeSetupModalBtn">&times;</button>
+      </div>
+
+      <form id="setupForm" class="modal-body">
+        <div class="form-group">
+          <label for="inputPersonName">Birthday Person's Name *</label>
+          <input type="text" id="inputPersonName" placeholder="e.g. Alex, Sam, or a nickname" required max="30">
+        </div>
+
+        <div class="form-group">
+          <label for="inputBdayDate">Birthday Date *</label>
+          <input type="date" id="inputBdayDate" required>
+        </div>
+
+        <div class="form-group">
+          <label for="inputCustomMessage">Special Birthday Message</label>
+          <textarea id="inputCustomMessage" rows="3" placeholder="Write a heartwarming or funny message..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Choose Vibe Theme</label>
+          <div class="theme-grid-selector"><label class="theme-grid-card"><input type="radio" name="setupTheme" value="midnight" checked><span>🌑 Midnight Black</span></label><label class="theme-grid-card"><input type="radio" name="setupTheme" value="emerald"><span>🌿 Emerald Green</span></label><label class="theme-grid-card"><input type="radio" name="setupTheme" value="ocean"><span>🌊 Ocean Blue</span></label><label class="theme-grid-card"><input type="radio" name="setupTheme" value="cyan"><span>⚡ Cyan Neon</span></label><label class="theme-grid-card"><input type="radio" name="setupTheme" value="sunset"><span>🌇 Sunset Glow</span></label><label class="theme-grid-card"><input type="radio" name="setupTheme" value="cosmic"><span>🌌 Cosmic Purple</span></label></div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary glow-effect btn-block">
+            ✨ Save birthday setup
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD WISH -->
+  <div class="modal-backdrop hidden" id="addWishModal">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3>💬 Write a Birthday Wish</h3>
+        <button class="close-modal-btn" id="closeWishModalBtn">&times;</button>
+      </div>
+
+      <form id="addWishForm" class="modal-body">
+        <div class="form-group">
+          <label for="wishAuthorInput">Your Name</label>
+          <input type="text" id="wishAuthorInput" placeholder="Your name or secret nickname" required maxLength="25">
+        </div>
+
+        <div class="form-group">
+          <label for="wishTextInput">Your Wish</label>
+          <textarea id="wishTextInput" rows="3" placeholder="Write something sweet, funny, or crazy..." required maxLength="180"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Pick Card Color</label>
+          <div class="color-picker-row">
+            <label class="color-opt" style="background:#ff4d6d"><input type="radio" name="wishColor" value="#ff4d6d" checked></label>
+            <label class="color-opt" style="background:#7000ff"><input type="radio" name="wishColor" value="#7000ff"></label>
+            <label class="color-opt" style="background:#00f5d4"><input type="radio" name="wishColor" value="#00f5d4"></label>
+            <label class="color-opt" style="background:#ffb703"><input type="radio" name="wishColor" value="#ffb703"></label>
+            <label class="color-opt" style="background:#ff007f"><input type="radio" name="wishColor" value="#ff007f"></label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-block">🚀 Post Wish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD TRIVIA QUESTION -->
+  <div class="modal-backdrop hidden" id="addTriviaModal">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3>🧠 Add Trivia Question</h3>
+        <button class="close-modal-btn" id="closeTriviaModalBtn">&times;</button>
+      </div>
+
+      <form id="addTriviaForm" class="modal-body">
+        <div class="form-group">
+          <label for="triviaQuestionInput">Question</label>
+          <input type="text" id="triviaQuestionInput" placeholder="e.g. What snack makes you happiest?" required>
+        </div>
+        <div class="form-group">
+          <label for="opt0">Option 1 (Correct Answer)</label>
+          <input type="text" id="opt0" placeholder="Correct Answer" required>
+        </div>
+        <div class="form-group">
+          <label for="opt1">Option 2</label>
+          <input type="text" id="opt1" placeholder="Wrong Option 1" required>
+        </div>
+        <div class="form-group">
+          <label for="opt2">Option 3</label>
+          <input type="text" id="opt2" placeholder="Wrong Option 2" required>
+        </div>
+        <div class="form-group">
+          <label for="opt3">Option 4</label>
+          <input type="text" id="opt3" placeholder="Wrong Option 3" required>
+        </div>
+        <div class="form-group"><label for="triviaCorrectAnswer">Correct choice</label><select id="triviaCorrectAnswer"><option value="0">Option 1</option><option value="1">Option 2</option><option value="2">Option 3</option><option value="3">Option 4</option></select></div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-block">➕ Save Question</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: LIGHTBOX FOR PHOTO -->
+  <div class="modal-backdrop hidden" id="photoLightbox">
+    <div class="lightbox-card">
+      <button class="close-modal-btn" id="closeLightboxBtn">&times;</button>
+      <img id="lightboxImg" src="" alt="Memory Photo">
+      <div class="lightbox-actions">
+        <button id="deletePhotoBtn" class="btn btn-secondary danger-btn">🗑️ Delete Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas for Fullscreen Fireworks & Particle FX -->
+  <canvas id="fireworksCanvas"></canvas>
+
+  <!-- Notification Toast container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
+
+

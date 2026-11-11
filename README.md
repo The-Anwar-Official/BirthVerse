@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿# BirthdayVerse
 
 A standalone birthday celebration page built from the existing HTML/CSS/vanilla JavaScript project. It needs no account, API key, build step, or package installation.
@@ -52,3 +53,7 @@ The page uses an optional Google Font with a system fallback. Core controls do n
 - [ ] Upload, preview, caption, reopen, and delete a memory; check browser storage limits.
 - [ ] Play each melody, change tracks, pause/resume, stop, and adjust volume.
 - [ ] Check keyboard focus, Escape/focus return in dialogs, reduced-motion mode, and microphone denial fallback.
+=======
+# BirthVerse
+BirthdayVerse — An interactive, multi-theme birthday celebration web app featuring a live countdown, mini-games, original Web Audio melodies, a local wishes &amp; memory gallery, gift surprises, and festive finale effects.
+>>>>>>> 69249fd95650589061be271641dbce123c1e5a0a
